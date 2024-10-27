@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div id="app">
+        <input type="text" id="node" v-model="message" />
+        <span id="text">{{message}}</span>
+    </div>
+
+    <script>
+        class Vue {
+            constructor(option) {
+                this.$data = option.data;
+                this.$el = option.el.nodeType === 1 ? option.el : document.querySelector(option.el);
+                new Observer(this.$data);
+                new Compile(this.$el, this);
+            }
+        }
+        class Compile {
+            constructor(el, vm) {
+                this.node = document.querySelector('#node')
+                this.text = document.querySelector('#text')
+                this.expr = this.node.getAttribute('v-model')
+                this.vm = vm
+                this.node.value = this.vm.$data[this.expr]
+                this.text.innerText = this.vm.$data[this.expr]
+                new Watcher(vm, this.expr, (newValue) => {
+                    //当值变化后，会调用cb将新值传递过来（）
+                    this.text.innerText = newValue
+                })
+
+                //为节点添加点击事件
+                this.node.addEventListener('input', e => {
+                    this.vm.$data[this.expr] = e.target.value;
+                })
+            }
+        }
+        class Dep {
+            constructor() {
+                //订阅的数组
+                this.subs = [];
+            }
+            //添加订阅者
+            addSub (watcher) {
+                this.subs.push(watcher);
+            }
+            //通知
+            notify () {
+                // console.log(this.subs);
+                this.subs.forEach(watcher => {
+                    watcher.update()
+                })
+            }
+        }
+        class Observer {
+            constructor(data) {
+                this.observer(data)
+            }
+            observer (data) {
+                //要对这个data数据原有的属性改成set和get的形式
+                if (!data || typeof data !== 'object') { //如果数据不存在或者不是对象
+                    return;
+                }
+                //要将数据一一劫持，先获取到data的key和value
+                Object.keys(data).forEach(key => { //该方法是将对象先转换成数组，再循环
+                    //劫持(定义一个函数，数据响应式)
+                    this.defineReactive(data, key, data[key]);
+                    //深度递归劫持，这里的递归只会为初始的data中的数据进行劫持（添加set和get方法），如果在defineReactive函数中使用set新增加则不会进行劫持
+                    this.observer(data[key]);
+                })
+            }
+            //定义响应式
+            defineReactive (obj, key, value) {
+                //在获取某个值的时候，可以在获取或更改值的时候，做一些处理
+                let that = this;
+                let dep = new Dep(); //每个变化的数据都会对应一个数组，这个数组是存放所有更新的操作
+                Object.defineProperty(obj, key, {
+                    get () { //当取值时，调用的方法
+                        Dep.target && dep.addSub(Dep.target);
+                        return value;
+                    },
+                    set (newValue) { //当给data属性中设置值的时候，更改获取的属性的值
+                        if (newValue !== value) {
+                            value = newValue;
+                            dep.notify(); //通知所有人数据更新了
+                        }
+                    }
+                })
+            }
+        }
+        class Watcher {
+            constructor(vm, expr, cb) {
+                this.vm = vm;
+                this.expr = expr;
+                this.cb = cb;
+                //先获取一下老的值
+                this.value = this.get();
+            }
+            get () {
+                Dep.target = this; //将当前watcher实例放入到tartget中
+                let value = this.vm.$data[this.expr]
+                Dep.target = null;
+                return value;
+            }
+            update () {
+                let newValue = this.vm.$data[this.expr]
+                let oldValue = this.value;
+                if (newValue !== oldValue) {
+                    this.cb(newValue); //对应watch的callback
+                }
+            }
+        }
+        let vm = new Vue({
+            el: '#app',
+            data: {
+                message: 'Hello message'
+            }
+        })
+    </script>
+</body>
+
+</html>
