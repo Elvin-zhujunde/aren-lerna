@@ -40,7 +40,7 @@
     "less-loader": "^11.0.0",
     "lint-staged": "^14.0.1",
     "prettier": "^3.0.2",
-    "vite": "^4.4.5",
+    "vite": "^5.4.9",
     "vite-plugin-eslint": "^1.8.1"
   }
 }
