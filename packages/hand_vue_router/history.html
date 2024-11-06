@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            http-equiv="X-UA-Compatible"
+            content="IE=edge"
+        />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        />
+        <title>his实现</title>
+    </head>
+    <body>
+        <div class="page">
+            <ul>
+                <li><a href="/home">首页</a></li>
+                <li><a href="/about">关于</a></li>
+            </ul>
+
+            <div id="routerView"></div>
+        </div>
+        <script>
+            let routerView = document.getElementById("routerView")
+
+            // 点击浏览器后退按钮，保证渲染出正确页面
+            window.addEventListener("popstate", onPopState)
+
+            window.addEventListener("DOMContentLoaded", onload)
+
+            function onload() {
+                onPopState()
+                let linkList = document.querySelectorAll(".page a[href]")
+                linkList.forEach(el => {
+                    el.addEventListener("click", function (e) {
+                        console.log(123)
+                        e.preventDefault() // 阻止掉herf的默认跳转事件
+                        // 手动让url发生改变
+                        history.pushState(null, "", el.getAttribute("href"))
+                        console.log(el.getAttribute("href"))
+                        onPopState()
+                    })
+                })
+            }
+
+            function onPopState() {
+                switch (location.pathname) {
+                    case "/home":
+                        routerView.innerHTML = "<h2>Home页面</h2>"
+                        return
+                    case "/about":
+                        routerView.innerHTML = "<h2>About页面</h2>"
+                        return
+                    default:
+                        return
+                }
+            }
+        </script>
+    </body>
+</html>

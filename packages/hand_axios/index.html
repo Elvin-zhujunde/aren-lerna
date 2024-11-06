@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script> -->
+  <script src="./myAxios.js"></script>
+  <title>Document</title>
+</head>
+
+<body>
+  <button class="btn">点我发请求</button>
+
+  <script>
+    document.querySelector('.btn').onclick = function () {
+      axios.interceptors.request.use(
+        (config) => {
+          config.method = 'get'
+          console.log('对正确请求做点什么');
+          return config
+        },
+        (err) => {
+          console.log('对错误请求做点什么');
+          return Promise.reject(err)
+        }
+      )
+      axios.interceptors.response.use(
+        (res) => {
+          res = { message: '你的数据被我修改了' }
+          console.log('对正确响应做点什么');
+          return res
+        },
+        (err) => {
+          console.log('对错误响应做点什么');
+          return Promise.reject(err)
+        }
+      )
+
+      // axios.get('http://localhost:5000/getTest')
+      //   .then(res => {
+      //     console.log('postAxios 成功响应', res);
+      //   })
+
+      axios({
+        // method: 'get',
+        url: 'http://localhost:5000/getTest',
+      }).then(res => {
+        console.log('getTest 成功响应', res);
+      })
+    }
+  </script>
+
+  <!-- <script>
+    axios.interceptors.request.use(
+      () => {
+
+      },
+      () => {
+        
+      }
+    )
+    axios.interceptors.response.use(
+      () => {
+      
+      },
+      () => {
+
+      }
+    )
+  </script> -->
+</body>
+
+</html>
