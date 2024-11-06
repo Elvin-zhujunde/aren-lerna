@@ -37,3 +37,7 @@ packages/
 
 package.json
 ```
+
+
+# formatter code 
+`npx prettier --write ./`
