@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <!-- <script>
+    const url = 'http://127.0.0.1:3000'
+    const data = { username: 'huihui' }
+    const myHeaders = new Headers({
+      'Content-Type': 'text/plain'
+    })
+
+    fetch(url, {
+      method: 'POST',
+      headers: myHeaders,
+      body: JSON.stringify(data),
+      mode: 'cors'
+    })
+      .then(res => res.json())
+      .then(res => {
+        console.log(JSON.parse(res.postData));
+      })
+  </script> -->
+  <script>
+    const url = 'http://127.0.0.1:3000'
+    const data = { username: 'huihui' }
+    const myHeaders = new Headers({
+      'X-Custom-Header': 'xxx'
+    })
+
+    fetch(url, {
+      method: 'PUT',
+      headers: myHeaders,
+      body: JSON.stringify(data),
+      mode: 'cors'
+    })
+      .then(res => res.json())
+      .then(res => {
+        console.log(JSON.parse(res.postData));
+      })
+  </script>
+</body>
+</html>
