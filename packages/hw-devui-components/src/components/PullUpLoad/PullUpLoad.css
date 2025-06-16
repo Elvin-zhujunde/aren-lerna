@@ -1,0 +1,63 @@
+.pull-up-load {
+  width: 100%;
+  overflow: hidden;
+}
+
+.pull-up-load__content {
+  width: 100%;
+  will-change: transform;
+}
+
+.pull-up-load__loading {
+  padding: 16px;
+  text-align: center;
+  color: #969799;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.loading-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  border: 2px solid #c8c9cc;
+  border-top-color: transparent;
+  border-radius: 100%;
+  animation: loading-rotate 0.8s linear infinite;
+}
+
+.loading-text {
+  font-size: 14px;
+}
+
+.pulling {
+  font-size: 14px;
+  transition: opacity 0.3s;
+}
+
+.pulling-text {
+  color: #969799;
+}
+
+.finished {
+  font-size: 14px;
+  color: #969799;
+}
+
+@keyframes loading-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+} 
